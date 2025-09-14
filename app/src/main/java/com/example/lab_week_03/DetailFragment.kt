@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 
 class DetailFragment : Fragment() {
 
-    private val coffeeTitle: TextView?
-        get() = view?.findViewById(R.id.coffee_title)
-
-    private val coffeeDesc: TextView?
-        get() = view?.findViewById(R.id.coffee_desc)
+    private val coffeeTitle get() = view?.findViewById<TextView>(R.id.coffee_title)
+    private val coffeeDesc get() = view?.findViewById<TextView>(R.id.coffee_desc)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,11 +23,17 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val coffeeId = arguments?.getInt(COFFEE_ID, 0) ?: 0
         setCoffeeData(coffeeId)
+
+        val backButton = view.findViewById<Button>(R.id.back_button)
+        backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_detailFragment_to_listFragment)
+        }
     }
 
-    private fun setCoffeeData(id: Int) {
+    fun setCoffeeData(id: Int) {
         when (id) {
             R.id.affogato -> {
                 coffeeTitle?.text = getString(R.string.affogato_title)
@@ -42,11 +47,19 @@ class DetailFragment : Fragment() {
                 coffeeTitle?.text = getString(R.string.latte_title)
                 coffeeDesc?.text = getString(R.string.latte_desc)
             }
+            R.id.cappuccino -> {
+                coffeeTitle?.text = "CAPPUCCINO"
+                coffeeDesc?.text = "Espresso with steamed milk foam. Served in a cappuccino cup."
+            }
+            R.id.mocha -> {
+                coffeeTitle?.text = "MOCHA"
+                coffeeDesc?.text = "Espresso with chocolate syrup, steamed milk, and whipped cream."
+            }
         }
     }
 
     companion object {
-        private const val COFFEE_ID = "COFFEE_ID"
+        const val COFFEE_ID = "COFFEE_ID"
 
         fun newInstance(coffeeId: Int) =
             DetailFragment().apply {
