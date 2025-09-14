@@ -24,5 +24,4 @@
             android:id="@+id/action_detailFragment_to_listFragment"
             app:destination="@id/listFragment" />
     </fragment>
-
 </navigation>
